@@ -2,10 +2,10 @@ FEATURE 2: SHOW/HIDE AN EVENT'S DETAILS
 
 As a User I should be able to show/hide an event so that I can see its details
 
-•	Scenario 1: An event element is collapsed by default
-  o	Given the main page is open
-  When no event has been clicked
-  Then all events will be collapsed
+•	Scenario 1: An event element is collapsed by default <br/>
+  o	Given the main page is open <br/>
+  When no event has been clicked <br/> 
+  Then all events will be collapsed <br/>
   
 •	Scenario 2: User can expand an event to see its details
   o	Given the user wants more details about an event
