@@ -29,7 +29,7 @@ class Event extends Component {
                     className='show-details'
                     onClick={this.handleButtonClicked}
                 >
-                    {collapsed ? 'Show Details' : 'Hide Details'}                   
+                    {collapsed ? 'Hide Details' : 'Show Details'}                   
                 </button>
 
                 {collapsed && (
