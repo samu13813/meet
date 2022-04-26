@@ -1,4 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:500);
+
+html {
+  background-color: #8D8DAA;
+}
+
 .App {
   text-align: center;
   padding: 2% 5%;

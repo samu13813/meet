@@ -13,9 +13,14 @@ describe('<NumberOfEvents /> component', () => {
         expect(NumberOfEventsWrapper.find('.numberOfEvents')).toHaveLength(1);
     });
 
-    test('render amount of events', () => {
-        NumberOfEventsWrapper.setState({ amountOfEvents: 10 });
-        expect(NumberOfEventsWrapper.state('amountOfEvents')).toEqual(10);
+    test('render number of events', () => {
+        NumberOfEventsWrapper.setState({ numberOfEvents: 32 });
+        expect(NumberOfEventsWrapper.state('numberOfEvents')).toEqual(32);
+    });
+
+    test('change number of events when input changes', () => {
+        NumberOfEventsWrapper.setState({ numberOfEvents: 32});
+        expect(NumberOfEventsWrapper.state('numberOfEvents')).toEqual(32);
     });
 
 });
