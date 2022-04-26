@@ -30,10 +30,12 @@ const removeQuery = () => {
             '//' +
             window.location.host +
             window.location.pathname;
-        window.history.pushState('', '', newurl);
+            window.history.pushState('', '', newurl);
     } else {
-        newurl = window.location.protocol + '//' + window.location.host;
-        window.history.pushState('', '', newurl);
+        newurl = 
+            window.location.protocol + '//' + 
+            window.location.host;
+            window.history.pushState('', '', newurl);
     }
 };
 
