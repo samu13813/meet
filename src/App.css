@@ -1,7 +1,33 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:500);
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,100;1,200&display=swap');
 
-html {
-  background-color: #8D8DAA;
+
+body {
+  background-color: #E0D8B0;
+  font-family: Roboto;
+}
+
+h1 {
+  margin-top: 0;
+  font-family: Poppins;
+  font-weight: 200;
+}
+
+h3 {
+  font-family: Poppins;
+}
+
+button {
+  background-color: #DEA057;
+  margin-top: 10px;
+  width: 100px;
+  height: 30px;
+  border-radius: 20px;
+  color: #180A0A;
+}
+
+button:hover {
+  background-color: #CE9461;
 }
 
 .App {
@@ -29,16 +55,21 @@ p {
   display: block;
 }
 
+.more-details {
+  margin-top: 15px;
+}
+
 input[type="text"],
 input[type="number"] {
   padding: 8px 6px 8px 10px;
   border-radius: 4px;
   outline: none;
-  border: 1px solid #ccc;
+  border: 1px solid #180A0A;
   font-size: 14px;
   line-height: 20px;
   align-self: center;
   height: 38px;
+  margin-bottom: 5px;
 }
 
 .city {
@@ -82,12 +113,15 @@ input[type="number"] {
 }
 
 .event {
-  padding: 10px 10px 35px;
-  margin-bottom: 10px;
+  padding: 10px 10px 15px;
+  background-color: #FCFFE7;
+  margin: auto;
+  margin-bottom: 20px;
   text-align: left;
-  border: 1px solid #ccc;
+  border: 2px solid #180A0A;
   border-radius: 4px;
   position: relative;
+  max-width: 60%;
 }
 
 .details-btn {
