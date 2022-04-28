@@ -12,7 +12,7 @@ class App extends Component {
     events: [],
     locations: [],
     numberOfEvents: 32,
-  }
+  };
 
   componentDidMount() {
     this.mounted = true;
@@ -21,11 +21,11 @@ class App extends Component {
         this.setState({ events, locations: extractLocations(events) });
       }
     });
-  }
+  };
 
   componentWillUnmount() {
     this.mounted = false;
-  }
+  };
 
   updateNumberOfEvents = (numberOfEvents) => {
     this.setState(
@@ -48,7 +48,7 @@ class App extends Component {
         });
       }
     });
-  }
+  };
   
   render() {
     return (
