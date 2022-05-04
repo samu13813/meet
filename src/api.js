@@ -1,6 +1,6 @@
-// This function takes an events array, then uses map to create a new array with only locations.
-// It will also remove all duplicates by creating another new array using the spread operator and spreading a Set.
-// The set will remove al duplicates from the array.
+// // This function takes an events array, then uses map to create a new array with only locations.
+// // It will also remove all duplicates by creating another new array using the spread operator and spreading a Set.
+// // The set will remove al duplicates from the array.
 
 import { mockData } from "./mock-data";
 import axios from 'axios';
@@ -21,22 +21,6 @@ const checkToken = async (accessToken) => {
     .catch((error) => error.json());
 
     return result;
-};
-
-const removeQuery = () => {
-    if (window.history.pushState && window.location.pathname) {
-        var newurl =
-            window.location.protocol +
-            '//' +
-            window.location.host +
-            window.location.pathname;
-            window.history.pushState('', '', newurl);
-    } else {
-        newurl = 
-            window.location.protocol + '//' + 
-            window.location.host;
-            window.history.pushState('', '', newurl);
-    }
 };
 
 export const getEvents = async () => {
@@ -62,6 +46,22 @@ export const getEvents = async () => {
         return result.data.events;
     }
 
+};
+
+const removeQuery = () => {
+    if (window.history.pushState && window.location.pathname) {
+        var newurl =
+            window.location.protocol +
+            '//' +
+            window.location.host +
+            window.location.pathname;
+            window.history.pushState('', '', newurl);
+    } else {
+        newurl = 
+            window.location.protocol + '//' + 
+            window.location.host;
+            window.history.pushState('', '', newurl);
+    }
 };
 
 const getToken = async (code) => {
