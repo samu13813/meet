@@ -64,7 +64,13 @@ export const getEvents = async () => {
 
     if (window.location.href.startsWith('http://localhost')) {
         NProgress.done();
-        return mockData;
+        return { events: mockData, locations: extractLocations(mockData) };
+    }
+
+    if (!navigator.onLine) {
+        const { events } = await localStorage.getItem("lastEvents");
+        NProgress.done();
+        return { events: JSON.parse(events), locations: extractLocations(events) };
     }
 
     const token = await getAccessToken();
@@ -75,11 +81,11 @@ export const getEvents = async () => {
         const result = await axios.get(url);
         if (result.data) {
             var locations = extractLocations(result.data.events);
-            localStorage.setItem('lastEvents', JSON.stringify(result.data));
+            localStorage.setItem('lastEvents', JSON.stringify(result.data.events));
             localStorage.setItem('locations', JSON.stringify(locations));
         }
         NProgress.done();
-        return result.data.events;
+        return { events: result.data.events, locations };
     }
 
 };
