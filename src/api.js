@@ -57,7 +57,7 @@ export const getEvents = async (max_results = 32) => {
   
     if (window.location.href.startsWith("http://localhost")) {
       NProgress.done();
-      return { events: mockEvents, locations: extractLocations(mockEvents) };
+      return { events: mockData, locations: extractLocations(mockData) };
     }
     if (!navigator.onLine) {
       const { events } = await localStorage.getItem("lastEvents");
