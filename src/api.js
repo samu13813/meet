@@ -48,9 +48,39 @@ const checkToken = async (accessToken) => {
 
 // };
 
-export const getEvents = async () => {
-    return mockData;
-};
+// export const getEvents = async () => {
+//     return mockData;
+// };
+
+const getEvents = async (max_results = 32) => {
+    NProgress.start();
+  
+    if (window.location.href.startsWith("http://localhost")) {
+      NProgress.done();
+      return { events: mockEvents, locations: extractLocations(mockEvents) };
+    }
+    if (!navigator.onLine) {
+      const { events } = await localStorage.getItem("lastEvents");
+      NProgress.done();
+      
+      return { events: JSON.parse(events), locations: extractLocations(events) };
+    }
+  
+    const token = await getAccessToken();
+    console.log('getEvents token: ', token)
+    if (token) {
+      removeQuery();
+      const url = `https://317h4535nd.execute-api.eu-west-3.amazonaws.com/dev/api/get-events/${token}/${max_results}`;
+      const result = await axios.get(url);
+      if (result.data) {
+        var locations = extractLocations(result.data.events);
+        localStorage.setItem("lastEvents", JSON.stringify(result.data.events));
+        localStorage.setItem("locations", JSON.stringify(locations));
+      }
+      NProgress.done();
+      return { events: result.data.events, locations };
+    }
+  };
 
 const removeQuery = () => {
     if (window.history.pushState && window.location.pathname) {
