@@ -76,6 +76,7 @@ export const getEvents = async () => {
     const token = await getAccessToken();
 
     if (token) {
+        console.log('getEvents token: ', token)
         removeQuery();
         const url = `https://317h4535nd.execute-api.eu-west-3.amazonaws.com/dev/api/get-events/${token}`;
         const result = await axios.get(url);
