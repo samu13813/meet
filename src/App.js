@@ -6,6 +6,7 @@ import NumberOfEvents from './NumberOfEvents';
 import { extractLocations, getEvents, checkToken, getAccessToken } from './api';
 import './nprogress.css';
 import WelcomeScreen from './WelcomeScreen';
+// import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 class App extends Component {
 
@@ -17,53 +18,54 @@ class App extends Component {
     showWelcomeScreen: undefined
   };
 
-  async componentDidMount() {
-    this.mounted = true;
-    const accessToken = localStorage.getItem('access_token');
-    const isTokenValid = (await checkToken(accessToken)).error ? false : true;
-    const searchParams = new URLSearchParams(window.location.search);
-    const code = searchParams.get('code');
-    this.setState({ showWelcomeScreen: !(code || isTokenValid ) });
-    if ((code || isTokenValid) && this.mounted) {
-      getEvents().then((events) => {
-        if (this.mounted) {
-          this.setState({ events, locations: extractLocations(events) });
-        }
-      });
-    }  
-  };
-
   // async componentDidMount() {
   //   this.mounted = true;
-  //   if (navigator.onLine && !window.location.href.startsWith('http://localhost')) {
-  //     const accessToken = localStorage.getItem('access_token');
-  //     const isTokenValid = (await checkToken(accessToken)).error ? false : true;
-  //     const searchParams = new URLSearchParams(window.location.search);
-  //     const code = searchParams.get("code");
-  //     if ((code || isTokenValid) && this.mounted) {
-  //       getEvents().then((events) => {
-  //         if (this.mounted) {
-  //           this.setState({
-  //             events,
-  //             locations: extractLocations(events),
-  //             warningText: ''
-  //           });
-  //         }
-  //       });
-  //     }
-  //   } else {
+  //   const accessToken = localStorage.getItem('access_token');
+  //   const isTokenValid = (await checkToken(accessToken)).error ? false : true;
+  //   const searchParams = new URLSearchParams(window.location.search);
+  //   const code = searchParams.get('code');
+  //   this.setState({ showWelcomeScreen: !(code || isTokenValid ) });
+  //   if ((code || isTokenValid) && this.mounted) {
   //     getEvents().then((events) => {
   //       if (this.mounted) {
-  //         this.setState({
-  //           events,
-  //           locations: extractLocations(events),
-  //           warningText: 'You are offline. The displayed event list may not be up to date.',
-  //           showWelcomeScreen: false
-  //         });
+  //         this.setState({ events, locations: extractLocations(events) });
   //       }
   //     });
-  //   }
+  //   }  
   // };
+
+  async componentDidMount() {
+    this.mounted = true;
+    if (navigator.onLine && !window.location.href.startsWith('http://localhost')) {
+      const accessToken = localStorage.getItem('access_token');
+      const isTokenValid = (await checkToken(accessToken)).error ? false : true;
+      const searchParams = new URLSearchParams(window.location.search);
+      const code = searchParams.get("code");
+      this.setState({ showWelcomeScreen: !(code || isTokenValid) });
+      if ((code || isTokenValid) && this.mounted) {
+        getEvents().then((events) => {
+          if (this.mounted) {
+            this.setState({
+              events,
+              locations: extractLocations(events),
+              warningText: ''
+            });
+          }
+        });
+      }
+    } else {
+      getEvents().then((events) => {
+        if (this.mounted) {
+          this.setState({
+            events,
+            locations: extractLocations(events),
+            warningText: 'You are offline. The displayed event list may not be up to date.',
+            showWelcomeScreen: false
+          });
+        }
+      });
+    }
+  }
 
   componentWillUnmount() {
     this.mounted = false;
@@ -78,52 +80,28 @@ class App extends Component {
     );
   };
 
-  // updateEvents = (location, eventCount) => {
-  //   getEvents().then((events) => {
-  //     const locationEvents = (location === 'all') ?
-  //       events : 
-  //       events.filter((event) => event.location === location);
-  //     if (this.mounted) {
-  //       this.setState({
-  //         events: locationEvents.slice(0, this.state.numberOfEvents),
-  //         numberOfEvents: eventCount
-  //       });
-  //     }
-  //   });
-  // };
-
   updateEvents = (location, eventCount) => {
-    console.log('update events token valid: ', this.state.tokenCheck)
-    const { currentLocation, numberOfEvents } = this.state;
-    if (location) {
-      getEvents().then((response) => {
-        const locationEvents =
-          location === "all"
-            ? response.events
-            : response.events.filter((event) => event.location === location);
-        const events = locationEvents.slice(0, numberOfEvents);
-        return this.setState({
-          events: events,
-          currentLocation: location,
-          locations: response.locations,
+    getEvents().then((events) => {
+      const locationEvents = (location === 'all') ?
+        events : 
+        events.filter((event) => event.location === location);
+      if (this.mounted) {
+        this.setState({
+          events: locationEvents.slice(0, this.state.numberOfEvents),
+          numberOfEvents: eventCount
         });
-      });
-    } else {
-      getEvents().then((response) => {
-        const locationEvents =
-          currentLocation === "all"
-            ? response.events
-            : response.events.filter(
-                (event) => event.location === currentLocation
-              );
-        const events = locationEvents.slice(0, eventCount);
-        return this.setState({
-          events: events,
-          numberOfEvents: eventCount,
-          locations: response.locations,
-        });
-      });
-    }
+      }
+    });
+  };
+
+  getData = () => {
+    const { locations, events } = this.state;
+    const data = locations.map((location) => {
+      const number = events.filter((event) => event.location === location).length
+      const city = location.split(', ').shift()
+      return { city, number };
+    })
+    return data;
   };
   
   render() {
@@ -133,18 +111,38 @@ class App extends Component {
     return (
       <div className='App'>
         <h1>MEET APP</h1>
+
         <CitySearch 
           locations={this.state.locations} 
           updateEvents={this.updateEvents} 
         />
+
         <NumberOfEvents 
           numberOfEvents={this.state.numberOfEvents} 
           updateNumberOfEvents={this.updateNumberOfEvents} 
         />
+
+        {/* <ScatterChart
+          width={400}
+          height={400}
+          margin={{
+            top: 20, right: 20, bottom: 20, left: 20,
+          }}
+        >
+          <CartesianGrid />
+          <XAxis type="number" dataKey="x" name="stature" unit="cm" />
+          <YAxis type="number" dataKey="y" name="weight" unit="kg" />
+          <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+          <Scatter name="A school"  fill="#8884d8" />
+        </ScatterChart> */}
+
         <EventList 
           events={this.state.events} 
           numberOfEvents={this.state.numberOfEvents}
         />
+        
+        
+
         <WelcomeScreen 
         showWelcomeScreen={this.state.showWelcomeScreen}
         getAccessToken={() => { getAccessToken() }} 
