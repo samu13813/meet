@@ -25,7 +25,6 @@ export const checkToken = async (accessToken) => {
 };
 
 const getToken = async (code) => {
-    removeQuery();
     const encodeCode = encodeURIComponent(code);
     const { access_token } = await fetch(
         `https://317h4535nd.execute-api.eu-west-3.amazonaws.com/dev/api/token/${encodeCode}`
@@ -65,13 +64,14 @@ export const getEvents = async () => {
 
     if (window.location.href.startsWith('http://localhost')) {
         NProgress.done();
-        return { events: mockData, locations: extractLocations(mockData) };
+        return mockData;
     }
 
     if (!navigator.onLine) {
-        const { events } = await localStorage.getItem("lastEvents");
+        console.log('Im offline');
+        const data = await localStorage.getItem("lastEvents");
         NProgress.done();
-        return { events: JSON.parse(events), locations: extractLocations(events) };
+        return data ? JSON.parse(data).events : [];
     }
 
     const token = await getAccessToken();
@@ -83,11 +83,11 @@ export const getEvents = async () => {
         const result = await axios.get(url);
         if (result.data) {
             var locations = extractLocations(result.data.events);
-            localStorage.setItem('lastEvents', JSON.stringify(result.data.events));
+            localStorage.setItem('lastEvents', JSON.stringify(result.data));
             localStorage.setItem('locations', JSON.stringify(locations));
         }
         NProgress.done();
-        return { events: result.data.events, locations };
+        return result.data.events;
     }
 
 };
