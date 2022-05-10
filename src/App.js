@@ -3,8 +3,9 @@ import './App.css';
 import EventList from './EventList';
 import CitySearch from './CitySearch';
 import NumberOfEvents from './NumberOfEvents';
-import { extractLocations, getEvents, checkToken } from './api';
+import { extractLocations, getEvents, checkToken, getAccessToken } from './api';
 import './nprogress.css';
+import WelcomeScreen from './WelcomeScreen';
 
 class App extends Component {
 
@@ -12,49 +13,57 @@ class App extends Component {
     events: [],
     locations: [],
     numberOfEvents: 32,
-    offlineText: ''
+    offlineText: '',
+    showWelcomeScreen: undefined
   };
 
-  // componentDidMount() {
-  //   this.mounted = true;
-  //   getEvents().then((events) => {
-  //     if (this.mounted) {
-  //       this.setState({ events, locations: extractLocations(events) });
-  //     }
-  //   });
-  // };
-
-  async componentDidMount() {
+  componentDidMount() {
     this.mounted = true;
-    if (navigator.onLine && !window.location.href.startsWith('http://localhost')) {
-      const accessToken = localStorage.getItem('access_token');
-      const isTokenValid = (await checkToken(accessToken)).error ? false : true;
-      const searchParams = new URLSearchParams(window.location.search);
-      const code = searchParams.get("code");
-      if ((code || isTokenValid) && this.mounted) {
-        getEvents().then((events) => {
-          if (this.mounted) {
-            this.setState({
-              events,
-              locations: extractLocations(events),
-              warningText: ''
-            });
-          }
-        });
-      }
-    } else {
+    const accessToken = localStorage.getItem('access_token');
+    const isTokenValid = (await checkToken(accessToken)).error ? false : true;
+    const searchParams = new URLSearchParams(window.location.search);
+    const code = searchParams.get('code');
+    this.setState({ showWelcomeScreen: !(code || isTokenValid ) });
+    if ((code || isTokenValid) && this.mounted) {
       getEvents().then((events) => {
         if (this.mounted) {
-          this.setState({
-            events,
-            locations: extractLocations(events),
-            warningText: 'You are offline. The displayed event list may not be up to date.',
-            showWelcomeScreen: false
-          });
+          this.setState({ events, locations: extractLocations(events) });
         }
       });
-    }
+    }  
   };
+
+  // async componentDidMount() {
+  //   this.mounted = true;
+  //   if (navigator.onLine && !window.location.href.startsWith('http://localhost')) {
+  //     const accessToken = localStorage.getItem('access_token');
+  //     const isTokenValid = (await checkToken(accessToken)).error ? false : true;
+  //     const searchParams = new URLSearchParams(window.location.search);
+  //     const code = searchParams.get("code");
+  //     if ((code || isTokenValid) && this.mounted) {
+  //       getEvents().then((events) => {
+  //         if (this.mounted) {
+  //           this.setState({
+  //             events,
+  //             locations: extractLocations(events),
+  //             warningText: ''
+  //           });
+  //         }
+  //       });
+  //     }
+  //   } else {
+  //     getEvents().then((events) => {
+  //       if (this.mounted) {
+  //         this.setState({
+  //           events,
+  //           locations: extractLocations(events),
+  //           warningText: 'You are offline. The displayed event list may not be up to date.',
+  //           showWelcomeScreen: false
+  //         });
+  //       }
+  //     });
+  //   }
+  // };
 
   componentWillUnmount() {
     this.mounted = false;
@@ -118,6 +127,9 @@ class App extends Component {
   };
   
   render() {
+
+    if (this.state.showWelcomeScreen === undefined) return <div className='App' />
+
     return (
       <div className='App'>
         <h1>MEET APP</h1>
@@ -132,6 +144,10 @@ class App extends Component {
         <EventList 
           events={this.state.events} 
           numberOfEvents={this.state.numberOfEvents}
+        />
+        <WelcomeScreen 
+        showWelcomeScreen={this.state.showWelcomeScreen}
+        getAccessToken={() => { getAccessToken() }} 
         />
       </div>
     );
