@@ -59,72 +59,42 @@ export const getAccessToken = async () => {
     return accessToken;
 };
 
-export const getEvents = async () => {
-    NProgress.start();
-
-    if (window.location.href.startsWith('http://localhost')) {
-        NProgress.done();
-        return mockData;
-    }
-
-    if (!navigator.onLine) {
-        console.log('Im offline');
-        const data = await localStorage.getItem("lastEvents");
-        NProgress.done();
-        return data ? JSON.parse(data).events : [];
-    }
-
-    const token = await getAccessToken();
-
-    if (token) {
-        console.log('getEvents token: ', token)
-        removeQuery();
-        const url = `https://317h4535nd.execute-api.eu-west-3.amazonaws.com/dev/api/get-events/${token}`;
-        const result = await axios.get(url);
-        if (result.data) {
-            var locations = extractLocations(result.data.events);
-            localStorage.setItem('lastEvents', JSON.stringify(result.data));
-            localStorage.setItem('locations', JSON.stringify(locations));
-        }
-        NProgress.done();
-        return result.data.events;
-    }
-
-};
-
 // export const getEvents = async () => {
-//     return mockData;
+//     NProgress.start();
+
+//     if (window.location.href.startsWith('http://localhost')) {
+//         NProgress.done();
+//         return mockData;
+//     }
+
+//     if (!navigator.onLine) {
+//         console.log('Im offline');
+//         const data = await localStorage.getItem("lastEvents");
+//         NProgress.done();
+//         return data ? JSON.parse(data).events : [];
+//     }
+
+//     const token = await getAccessToken();
+
+//     if (token) {
+//         console.log('getEvents token: ', token)
+//         removeQuery();
+//         const url = `https://317h4535nd.execute-api.eu-west-3.amazonaws.com/dev/api/get-events/${token}`;
+//         const result = await axios.get(url);
+//         if (result.data) {
+//             var locations = extractLocations(result.data.events);
+//             localStorage.setItem('lastEvents', JSON.stringify(result.data));
+//             localStorage.setItem('locations', JSON.stringify(locations));
+//         }
+//         NProgress.done();
+//         return result.data.events;
+//     }
+
 // };
 
-// export const getEvents = async => {
-//     NProgress.start();
-  
-//     if (window.location.href.startsWith("http://localhost")) {
-//       NProgress.done();
-//       return { events: mockData, locations: extractLocations(mockData) };
-//     }
-//     if (!navigator.onLine) {
-//       const { events } = await localStorage.getItem("lastEvents");
-//       NProgress.done();
-      
-//       return { events: JSON.parse(events), locations: extractLocations(events) };
-//     }
-  
-//     const token = await getAccessToken();
-//     console.log('getEvents token: ', token)
-//     if (token) {
-//       removeQuery();
-//       const url = `https://317h4535nd.execute-api.eu-west-3.amazonaws.com/dev/api/get-events/${token}`;
-//       const result = await axios.get(url);
-//       if (result.data) {
-//         var locations = extractLocations(result.data.events);
-//         localStorage.setItem("lastEvents", JSON.stringify(result.data.events));
-//         localStorage.setItem("locations", JSON.stringify(locations));
-//       }
-//       NProgress.done();
-//       return { events: result.data.events, locations };
-//     }
-//   };
+export const getEvents = async () => {
+    return mockData;
+};
 
 const removeQuery = () => {
     if (window.history.pushState && window.location.pathname) {
