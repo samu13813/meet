@@ -8,6 +8,7 @@ import './nprogress.css';
 import WelcomeScreen from './WelcomeScreen';
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import EventGenre from './EventGenre';
+import { WarningAlert } from './Alert';
 
 class App extends Component {
 
