@@ -14,6 +14,7 @@ export const extractLocations = (events) => {
 };
 
 export const checkToken = async (accessToken) => {
+    console.log(accessToken);
     const result = await fetch(
         `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
     )
