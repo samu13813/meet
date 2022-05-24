@@ -30,60 +30,58 @@ class App extends Component {
     );
   };
 
-  // async componentDidMount() {
-  //   this.mounted = true;
-  //   const accessToken = localStorage.getItem('access_token');
-  //   const isTokenValid = (await checkToken(accessToken)).error ? false : true;
-  //   const searchParams = new URLSearchParams(window.location.search);
-  //   const code = searchParams.get('code');
-  //   this.setState({ showWelcomeScreen: !(code || isTokenValid ) });
-  //   if ((code || isTokenValid) && this.mounted) {
-  //     getEvents().then((events) => {
-  //       if (this.mounted) {
-  //         this.setState({ events, locations: extractLocations(events) });
-  //       }
-  //     });
-  //   }  
-  // };
-
   async componentDidMount() {
     this.mounted = true;
-    if (navigator.onLine && !window.location.href.startsWith('http://localhost')) {
-      const accessToken = localStorage.getItem('access_token');
-      const isTokenValid = (await checkToken(accessToken)).error ? false : true;
-      const searchParams = new URLSearchParams(window.location.search);
-      const code = searchParams.get("code");
-      this.setState({ showWelcomeScreen: !(code || isTokenValid) });
-      if ((code || isTokenValid) && this.mounted) {
-        getEvents().then((events) => {
-          if (this.mounted) {
-            this.setState({
-              events,
-              locations: extractLocations(events),
-              warningText: ''
-            });
-          }
-        });
-      }
-    } else {
+    const accessToken = localStorage.getItem('access_token');
+    const isTokenValid = (await checkToken(accessToken)).error ? false : true;
+    const searchParams = new URLSearchParams(window.location.search);
+    const code = searchParams.get('code');
+    this.setState({ showWelcomeScreen: !(code || isTokenValid ) });
+    if ((code || isTokenValid) && this.mounted) {
       getEvents().then((events) => {
         if (this.mounted) {
-          this.setState({
-            events,
-            locations: extractLocations(events),
-            warningText: 'You are offline. The displayed event list may not be up to date.',
-            showWelcomeScreen: false
-          });
+          this.setState({ events, locations: extractLocations(events) });
         }
       });
-    }
-  }
+    }  
+  };
+
+  // async componentDidMount() {
+  //   this.mounted = true;
+  //   if (navigator.onLine && !window.location.href.startsWith('http://localhost')) {
+  //     const accessToken = localStorage.getItem('access_token');
+  //     const isTokenValid = (await checkToken(accessToken)).error ? false : true;
+  //     const searchParams = new URLSearchParams(window.location.search);
+  //     const code = searchParams.get("code");
+  //     this.setState({ showWelcomeScreen: !(code || isTokenValid) });
+  //     if ((code || isTokenValid) && this.mounted) {
+  //       getEvents().then((events) => {
+  //         if (this.mounted) {
+  //           this.setState({
+  //             events,
+  //             locations: extractLocations(events),
+  //             warningText: ''
+  //           });
+  //         }
+  //       });
+  //     }
+  //   } else {
+  //     getEvents().then((events) => {
+  //       if (this.mounted) {
+  //         this.setState({
+  //           events,
+  //           locations: extractLocations(events),
+  //           warningText: 'You are offline. The displayed event list may not be up to date.',
+  //           showWelcomeScreen: false
+  //         });
+  //       }
+  //     });
+  //   }
+  // }
 
   componentWillUnmount() {
     this.mounted = false;
   };
-
- 
 
   updateEvents = (location, eventCount) => {
     getEvents().then((events) => {
@@ -109,10 +107,9 @@ class App extends Component {
     return data;
   };
   
-  
   render() {
     
-    const { events, warningText } = this.state;
+    const { events } = this.state;
 
     if (this.state.showWelcomeScreen === undefined) return <div className='App' />
 
@@ -129,8 +126,6 @@ class App extends Component {
           numberOfEvents={this.state.numberOfEvents} 
           updateNumberOfEvents={this.updateNumberOfEvents} 
         />
-
-        <WarningAlert id='warningAlert' text={warningText} />
 
         <div className='data-vis-wrapper'>
 
