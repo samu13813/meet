@@ -27,7 +27,7 @@ export const checkToken = async (accessToken) => {
 const getToken = async (code) => {
     const encodeCode = encodeURIComponent(code);
     const { access_token } = await fetch(
-        `https://317h4535nd.execute-api.eu-west-3.amazonaws.com/dev/api/token/${encodeCode}`
+        `https://o1k84bi5nl.execute-api.eu-west-3.amazonaws.com/dev/api/token/${encodeCode}`
     )
         .then((res) => {
             return res.json();
@@ -49,7 +49,7 @@ export const getAccessToken = async () => {
         const code = await searchParams.get('code');
         if (!code) {
             const results = await axios.get(
-                'https://317h4535nd.execute-api.eu-west-3.amazonaws.com/dev/api/get-auth-url'
+                'https://o1k84bi5nl.execute-api.eu-west-3.amazonaws.com/dev/api/get-auth-url'
             );
             const { authUrl } = results.data;
             return (window.location.href = authUrl);
