@@ -19,7 +19,7 @@ function WelcomeScreen(props) {
                     <a
                         href="https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar.readonly&response_type=code&client_id=1003357027648-h5fon195en6icmrj8lnsafcarsmjvlmu.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsamu13813.github.io%2Fmeet%2F"
                         rel="nofollow noopener"
-                        class="btn-text"
+                        className="btn-text"
                      >
                         <b>Sign In with Google</b>
                     </a>

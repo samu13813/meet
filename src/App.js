@@ -24,9 +24,10 @@ class App extends Component {
   updateNumberOfEvents = (eventCount) => {
     this.setState(
       { 
-        numberOfEvents: eventCount
+        numberOfEvents: eventCount,
+        currentLocation: 'all'
       }, 
-      this.updateEvents(this.state.locations, eventCount)
+      this.updateEvents(this.state.currentLocation, eventCount),
     );
   };
 
@@ -79,9 +80,47 @@ class App extends Component {
   //   }
   // }
 
+  // async componentDidMount() {
+  //   const accessToken = localStorage.getItem("access_token");
+  //   const validToken = accessToken !== null  ? await checkToken(accessToken) : false;
+  //   this.setState({ tokenCheck: validToken });
+  //   if(validToken === true) this.updateEvents()
+  //   const searchParams = new URLSearchParams(window.location.search);
+  //   const code = searchParams.get("code");
+
+  //   this.mounted = true;
+  //   if (code && this.mounted === true && validToken === false){ 
+  //     this.setState({tokenCheck:true });
+  //     this.updateEvents()
+  //   }
+  // }
+
   componentWillUnmount() {
     this.mounted = false;
   };
+
+  // updateEvents = (location, eventCount) => {
+  //   getEvents().then((events => {
+  //     if (eventCount !== undefined) {
+  //       this.setState({
+  //         numberOfEvents: eventCount
+  //       })
+  //     }
+  //     // filter event list by location
+  //     let eventList = location !== 'all' ?
+  //       events.filter(event => event.location === location) :
+  //       events
+
+  //     // Shorten event list
+  //     let shortEventList = eventList.slice(0, this.state.numberOfEvents)
+
+  //     // Assign value to events state, assign currentLocation
+  //     this.setState({
+  //       events: shortEventList,
+  //       currentLocation: location
+  //     });
+  //   }));
+  // }
 
   updateEvents = (location, eventCount) => {
     getEvents().then((events) => {

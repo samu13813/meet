@@ -14,12 +14,12 @@ export const extractLocations = (events) => {
 };
 
 export const checkToken = async (accessToken) => {
-    console.log(accessToken);
     const result = await fetch(
         `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
     )
     .then((res) => res.json())
     .catch((error) => error.json());
+    console.log(result + ' result');
 
     return result;
 };
@@ -48,10 +48,16 @@ export const getAccessToken = async () => {
         const searchParams = new URLSearchParams(window.location.search);
         const code = await searchParams.get('code');
         if (!code) {
+            console.log(accessToken + 'accessToken SECOND');
             const results = await axios.get(
-                'https://o1k84bi5nl.execute-api.eu-west-3.amazonaws.com/dev/api/get-auth-url'
+                'https://o1k84bi5nl.execute-api.eu-west-3.amazonaws.com/dev/api/get-auth-url', {
+                    headers: {
+                        'Access-Control-Allow-Origin': '*'
+                    }
+                }
             );
             const { authUrl } = results.data;
+            console.log(accessToken + 'accessToken SECOND');
             return (window.location.href = authUrl);
         }
         return code && getToken(code);
@@ -59,34 +65,42 @@ export const getAccessToken = async () => {
     return accessToken;
 };
 
-// export const getEvents = async () => {
-//     NProgress.start();
 
+
+// export const getEvents = async () => {
+    
 //     if (window.location.href.startsWith('http://localhost')) {
-//         NProgress.done();
+//         console.log('mockData for localhost');
 //         return mockData;
 //     }
 
 //     if (!navigator.onLine) {
 //         console.log('Im offline');
 //         const data = await localStorage.getItem("lastEvents");
-//         NProgress.done();
+//         console.log(data + ' this is data');
+//         // NProgress.done();
 //         return data ? JSON.parse(data).events : [];
 //     }
 
 //     const token = await getAccessToken();
+//     console.log('access token' + token);
 
 //     if (token) {
-//         console.log('getEvents token: ', token)
 //         removeQuery();
 //         const url = `https://317h4535nd.execute-api.eu-west-3.amazonaws.com/dev/api/get-events/${token}`;
-//         const result = await axios.get(url);
+//         console.log('URL is - ' + url);
+//         const result = await axios.get(url, {
+//             headers: {
+//                 'Access-Control-Allow-Origin': '*'
+//             }
+//         });
+//         console.log(result.data + ' THIS IS RESULT DATA');
+//         console.log(result.data.events + ' THIS IS RESULT DATA EVENTS')
 //         if (result.data) {
 //             var locations = extractLocations(result.data.events);
 //             localStorage.setItem('lastEvents', JSON.stringify(result.data));
 //             localStorage.setItem('locations', JSON.stringify(locations));
 //         }
-//         NProgress.done();
 //         return result.data.events;
 //     }
 
@@ -94,7 +108,7 @@ export const getAccessToken = async () => {
 
 export const getEvents = async () => {
     return mockData;
-};
+}
 
 const removeQuery = () => {
     if (window.history.pushState && window.location.pathname) {
