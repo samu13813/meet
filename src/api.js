@@ -19,7 +19,6 @@ export const checkToken = async (accessToken) => {
     )
     .then((res) => res.json())
     .catch((error) => error.json());
-    console.log(result + ' result');
 
     return result;
 };
@@ -48,7 +47,6 @@ export const getAccessToken = async () => {
         const searchParams = new URLSearchParams(window.location.search);
         const code = await searchParams.get('code');
         if (!code) {
-            console.log(accessToken + 'accessToken SECOND');
             const results = await axios.get(
                 'https://o1k84bi5nl.execute-api.eu-west-3.amazonaws.com/dev/api/get-auth-url', {
                     headers: {
@@ -57,7 +55,6 @@ export const getAccessToken = async () => {
                 }
             );
             const { authUrl } = results.data;
-            console.log(accessToken + 'accessToken SECOND');
             return (window.location.href = authUrl);
         }
         return code && getToken(code);
@@ -87,7 +84,7 @@ export const getAccessToken = async () => {
 
 //     if (token) {
 //         removeQuery();
-//         const url = `https://317h4535nd.execute-api.eu-west-3.amazonaws.com/dev/api/get-events/${token}`;
+//         const url = ` https://o1k84bi5nl.execute-api.eu-west-3.amazonaws.com/dev/api/get-events/${token}`;
 //         console.log('URL is - ' + url);
 //         const result = await axios.get(url, {
 //             headers: {
