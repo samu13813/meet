@@ -190,10 +190,10 @@ class App extends Component {
           numberOfEvents={this.state.numberOfEvents}
         />     
 
-        {/* <WelcomeScreen 
+        <WelcomeScreen 
         showWelcomeScreen={this.state.showWelcomeScreen}
         getAccessToken={() => { getAccessToken() }} 
-        /> */}
+        />
       </div>
     );
   }
